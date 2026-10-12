@@ -1,0 +1,85 @@
+# general configs
+project_name: nct_rrl
+extends: configs/default.yaml
+
+exp_name: nct_crl_2
+
+model:
+  arch: crl
+  backbone: resnet34
+  l1: 256
+  l2: 256
+  use_not: true
+  use_skip: false
+  temperature: 1
+  l2_weight: 5.0e-6
+  logic_weight: 2   # 👈 新增逻辑损失权重
+  num_experts: 5 
+  gate_topk: 1           #没有用到现在，topk选择的，现在是softmax + top1
+  gate_lb_weight: 1e-4     # 负载均衡 loss 权重（防止只用一个专家）
+
+
+data:
+  data_dir: /data/fanli/workspace/Datasets_new/nct
+  dataset: nct
+  batch_size: 128
+  img_size: 224
+  img_mean: [0.485, 0.456, 0.406]
+  img_std: [0.229, 0.224, 0.225]
+  # From your header screenshot: 9 classes * 3 concepts each = 27 concepts
+  n_concepts: 27
+  n_classes: 9
+  fold: 0
+  train_csv: /data/fanli/workspace/Datasets_new/nct/meta_data/train.csv
+  test_csv: /data/fanli/workspace/Datasets_new/nct/meta_data/test.csv
+
+opt:
+  optimizer: adamw
+  lr: 5.0e-4
+  max_epochs: 300
+
+
+
+
+# #crl_moe版本
+# # general configs
+# project_name: nct_crl_moe_3
+# extends: configs/default.yaml
+
+# exp_name: nct_crl_moe
+
+# model:
+#   arch: crl
+#   backbone: resnet34
+#   l1: 256
+#   l2: 256
+#   use_not: false
+#   use_skip: false
+#   temperature: 1
+#   l2_weight: 5.0e-6
+#   num_experts: 5        # ⭐️ MoE 专家数，与 CRL_MoE 里 self.num_experts 对应
+#   gate_topk: 1           #没有用到现在，topk选择的，现在是softmax + top1
+#   gate_lb_weight: 0.01   # 负载均衡 loss 权重（防止只用一个专家）
+#   gate_ent_weight: 0.01  # 熵正则权重（训练初期防塌陷/鼓励探索）
+#   concept_weight: 0.1
+#   logic_weight: 0.5   # 👈 新增逻辑损失权重
+#   concept_warmup_epochs: 5
+
+# data:
+#   data_dir: /data/fanli/workspace/Datasets_new/nct
+#   dataset: nct
+#   batch_size: 128
+#   img_size: 224
+#   img_mean: [0.485, 0.456, 0.406]
+#   img_std: [0.229, 0.224, 0.225]
+#   # From your header screenshot: 9 classes * 3 concepts each = 27 concepts
+#   n_concepts: 27
+#   n_classes: 9
+#   fold: 0
+#   train_csv: /data/fanli/workspace/Datasets_new/nct/meta_data/train.csv
+#   test_csv: /data/fanli/workspace/Datasets_new/nct/meta_data/test.csv
+
+# opt:
+#   optimizer: adamw
+#   lr: 5.0e-4
+#   max_epochs: 300

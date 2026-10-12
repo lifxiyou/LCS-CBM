@@ -1,0 +1,16 @@
+# F17k subspace usage analysis (Full LCS-CBM vs w/o Gate Balancing)
+# 用法见 scripts/export_subspace_usage.py
+extends: configs/fitzpatrick17k.yaml
+
+exp_name: f17k_subspace_usage
+
+model:
+  debug_gate: true
+  gate_stats_dir: ./results/subspace_usage/f17k
+  # gate_stats_variant 由脚本 --variant 传入；训练时可在命令行覆盖
+  gate_stats_variant: LCS-CBM
+  num_experts: 4
+  gate_lb_weight: 0.01
+
+data:
+  fold: 0

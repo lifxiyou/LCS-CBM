@@ -1,0 +1,32 @@
+# CRL 单专家用 config（与 skin_crl_moe 的 skin.yaml 区分：use_not true, use_skip true, 无 num_experts）
+# 用于 viz_cbm_crl_crlmoe_comparison.py 加载 CRL checkpoint 时 --config_crl configs/skin_crl.yaml
+# 注：单专家旧格式 checkpoint 的 use_not/l1/l2/use_skip 会由 state_dict 推断覆盖，以匹配权重 shape
+project_name: skin_rrl
+extends: configs/default.yaml
+exp_name: skin_crl
+
+model:
+  arch: crl
+  backbone: resnet34
+  l1: 256
+  l2: 256
+  use_not: false
+  use_skip: false
+  temperature: 1
+  l2_weight: 5.0e-6
+
+data:
+  data_dir: /data/fanli/workspace/Datasets/fitzpatrick17k
+  dataset: skincon
+  batch_size: 64
+  img_size: 224
+  img_mean: [0.485, 0.456, 0.406]
+  img_std: [0.229, 0.224, 0.225]
+  n_concepts: 48
+  n_classes: 2
+  fold: 0
+
+opt:
+  optimizer: adamw
+  lr: 5.0e-4
+  max_epochs: 300
